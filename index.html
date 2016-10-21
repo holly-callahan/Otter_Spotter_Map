@@ -15,6 +15,53 @@
 
     <title>Map</title>
 </head>
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #ffffff;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        background-color: #ffffff;
+        display: block;
+        transition: 0.3s
+    }
+    .sidenav a:hover, .offcanvas a:focus{
+    }
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    #main {
+        transition: margin-left .5s;
+    }
+    @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+    }
+    /* How about a different background color? */
+    #map {width: 100%; height: 100%; background-color: #F7CE86; position: absolute}
+    .leaflet-popup-content li {list-style:none;}
+    .leaflet-popup-content {width: 102px;}
+    .leaflet-popup-content img {width: 100px;}
+    a {border: none;}
+</style>
 
 <body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -27,7 +74,6 @@
         <a href="#!user"><img class="square" src="WPZlogo.png" style="width:200px;height:200px;" ></a>
         </div>
         <a href="#!name"><span class="white-text name">Otter Spotter</span></a>
-        
     </div>
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <ul class="collapsible" data-collapsible="accordion">
@@ -49,9 +95,7 @@
     <h3 align="center">Otter Spotter Submissions</h3>
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
 </div>
-<div></div>
 <div id="map" class="content"></div>
-
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -59,11 +103,10 @@
         Tabletop.init( { key: URL, callback: showInfo, simpleSheet: true } )
     })
     function showInfo(data) {
-        console.log(data);
         // the column headers of the info you want in your popup
-        var optionsJSON = ["sightingdate","numberotters","comments"];
+        var optionsJSON = ["First Name"]
         // an html template for your popup
-        var template = "<h5>Sighting Date: {{sightingdate}} <br> Number of Otters: {{numberotters}} <br> Comments: {{comments}}</h5>"
+        var template = "<h4>Hello {{First Name}}</h4>"
         var geoJSON = Sheetsee.createGeoJSON(data, optionsJSON)
         var map = Sheetsee.loadMap("map")
         // Try different map tiles? examples.map-20v6611k
@@ -74,9 +117,7 @@
         Sheetsee.addTileLayer(map, 'jllord.n7aml2bc')
         Sheetsee.addMarkerLayer(geoJSON, map, template)
     }
-
 </script>
-
 <script>
     // Initialize collapse button
     $('.button-collapse').sideNav({
@@ -88,19 +129,13 @@
     );
     // Initialize collapsible (uncomment the line below if you use the dropdown variation)
     $('.collapsible').collapsible();
-
-
-
 </script>
 <script>
     function openNav() {
         document.getElementById("mySidenav").style.width = "500px";
         document.getElementById("main").style.marginLeft = "500px";
         document.getElementById("map").style.marginLeft = "500px";
-
-
     }
-
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft= "0";
@@ -108,63 +143,6 @@
     }
 </script>
 
+
 </body>
-
-<style>
-    body {
-        font-family: "Lato", sans-serif;
-    }
-
-    .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #ffffff;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-    }
-
-    .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        background-color: #ffffff;
-        display: block;
-        transition: 0.3s
-    }
-
-    .sidenav a:hover, .offcanvas a:focus{
-
-    }
-
-    .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-    }
-
-    #main {
-        transition: margin-left .5s;
-
-
-    }
-
-    @media screen and (max-height: 450px) {
-        .sidenav {padding-top: 15px;}
-        .sidenav a {font-size: 18px;}
-    }
-
-    /* How about a different background color? */
-    #map {width: 100%; height: 100%; background-color: #F7CE86; position: fixed}
-    .leaflet-popup-content li {list-style:none;}
-    .leaflet-popup-content {width: 102px;}
-    .leaflet-popup-content img {width: 100px;}
-    a {border: none;}
-</style>
 </html>
