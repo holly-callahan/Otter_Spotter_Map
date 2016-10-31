@@ -5,30 +5,390 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="tabletop1.3.4.js"></script>
     <script type="text/javascript" src="sheetsee.js"></script>
-    <link   type='text/css' rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox.js/v1.0.0/mapbox.css'>
-    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+        <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script> -->
+
+    <!-- <link rel="stylesheet" href="Leaflet.markercluster-1.0.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="Leaflet.markercluster-1.0.0/dist/MarkerCluster.Default.css" />
+    <script src="Leaflet.markercluster-1.0.0/dist/leaflet.markercluster-src.js"></script> -->
+
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
 
+   
+
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
+
+
     <title>Map</title>
 </head>
+
+<body>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="materialize.min.js"></script>
+
+<div id="mySidenav" class="sidenav">
+    <div class="userView">
+        <div style="text-align: center">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#!user"><img class="square" src="WPZlogo.png" style="width:200px; height:200px;" ></a>
+        </div>
+        <a href="#!name"><span class="white-text name">Otter Spotter</span></a>
+        
+    </div>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <ul class="collapsible" data-collapsible="accordion">
+        <li>
+            <div class="collapsible-header">Otter Spotter Photos</div>
+            <div class="collapsible-body"><iframe src="https://drive.google.com/embeddedfolderview?id=0B75dNdviw-N-MDFCYnJnY29SUmc#grid"     width="500" height="400" frameborder="0"></iframe>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header">Filters
+            </div>
+
+            <div class="collapsible-body">
+                <label for="Filters" >Click on a button to filter the sightings</label><br>
+                        <input name="Filters" type="radio" id="VConfident" value="VeryConfident" />
+                         <label for="VConfident">Highly confident otter sightings</label>
+                         <br>
+                        <input name="Filters" type="radio" id="PupsPresent" value="PupsPresent" />
+                         <label for="PupsPresent">Otter sightings with pups present</label>
+                          <br>
+                        <input name="Filters" type="radio" id="LiveObservation" value="None" />
+                        <label for="LiveObservation">Observations of live otters (NEEDS WORK)</label>
+                         <br>
+                        <input name="Filters" type="radio" id="NoFilters" value="None" checked="checked"/>
+                        <label for="NoFilters">No Filter</label>
+                       
+
+
+            </div>
+        </li>
+    </ul>
+ <br><br>
+ 
+</div>
+
+
+<div id="main" >
+    <h3 class="light-green-text" align="center">Woodland Park Zoo's Otter Spotter Citizen Science Initative</h3>
+    <h5 class="orange-text" align="center">Otter Sightings Map</h5>
+    <span class="orange-text" style="font-size:25px; cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+</div>
+
+<div id="map" class="content"></div>
+
+
+<script type="text/javascript">
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var URL = "1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak"
+        Tabletop.init( { key: URL, callback: showInfo, simpleSheet: true } );
+    });
+
+    var allData= [];
+    var bigMap= null;
+    var mydata= null;
+    function showInfo(data) {
+        allData= data;
+        console.log(allData);
+        // the column headers of the info you want in your popup
+        var optionsJSON = ["sightingdate","numberotters","comments", "confidence", "distinguishpups", "sightinginputs"];
+        // an html template for your popup
+        
+        var geoJSON = Sheetsee.createGeoJSON(allData, optionsJSON);
+
+        console.log("meydata", geoJSON);
+
+        // var mymap = L.map('map').setView([46.6, -120.6], 6);
+
+        L.mapbox.accessToken = "pk.eyJ1Ijoib3R0ZXJzcG90dGVyIiwiYSI6ImNpdXVhMDlqZjAzMjIydXBzbW5rYjVkbjMifQ.OmeqDy-3EUj-A_b81e-fGA";
+        var mymap= L.mapbox.map('map', "mapbox.streets", { zoomControl: true });
+        mydata = L.mapbox.featureLayer().addTo(mymap);
+
+//         L.mapbox.featureLayer().on('ready', function(e) {
+//     // The clusterGroup gets each marker in the group added to it
+//     // once loaded, and then is added to the map
+//     var clusterGroup = new L.MarkerClusterGroup({
+//       // The iconCreateFunction takes the cluster as an argument and returns
+//       // an icon that represents it. We use L.mapbox.marker.icon in this
+//       // example, but you could also use L.icon or L.divIcon.
+//       iconCreateFunction: function(cluster) {
+//         return L.mapbox.marker.icon({
+//           // show the number of markers in the cluster on the icon.
+//           'marker-symbol': cluster.getChildCount(),
+//           'marker-color': '#422'
+//         });
+//       }
+//     });
+//     e.target.eachLayer(function(layer) {
+//         clusterGroup.addLayer(layer);
+//     });
+//     mymap.addLayer(clusterGroup);
+// });
+
+        mydata.setGeoJSON(geoJSON);
+
+       
+        mymap.fitBounds(mydata);
+
+
+        mydata.on('click', function(e) {  
+
+        costumeMarkerPopUp( e, e.latlng);
+
+        });
+        function costumeMarkerPopUp(item, position){
+           //offset values
+           var options = {
+               offset:  new L.Point(1, -10),
+               maxHeight: 200,
+               minWidth:200
+
+           };
+
+           console.log("e", item);
+           // close any map popups
+           //$scope.map.closePopup();
+           //var template = '<md-button class="md-primary" ng-click="showAdvanced()" style="font-size: 12px">View response</md-button>';
+           // var template = '<div><span class="popText" ng-click="showAdvanced()">view</span></div>';
+           var template = "<h3><li>Sighting Date:</li>" + item.layer.feature.opts.sightingdate +"<br><li> Number of Otters:</li>" +item.layer.feature.opts.numberotters + "<br><li>Comments:</li>" +item.layer.feature.opts.comments +"</h3>"
+           // template = template, linkFunction = $compile(angular.element(template)),
+           //     newScope = $scope.$new();
+
+           // define the map popup and put it on the map at the center of the polygon
+           popup = L.popup(options)
+               .setLatLng([position.lat, position.lng])
+               .setContent(template)
+               .openOn(mymap)
+       }
+
+
+    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+    //     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+    //     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    //     'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    //     id: 'mapbox.streets'
+    // }).addTo(mymap);
+    
+        //bigMap = Sheetsee.loadMap("map");
+        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+
+        // Try different map tiles? examples.map-20v6611k
+        // examples.map-y7l23tes
+        // examples.map-h67hf2ic
+        // examples.map-i86nkdio
+        // examples.h186knp8
+        //Sheetsee.addTileLayer(bigMap, 'jllord.n7aml2bc');
+        //Sheetsee.addTileLayer(map, 'spatialdev.a71dbae4');
+        //Sheetsee.addMarkerLayer(geoJSON, bigMap, template);
+        // L.geoJSON(geoJSON, {
+        //     style: function (feature) {
+        //         //return {color: feature.properties.color};
+        //      }
+        //      }).bindPopup( template,
+        //     //return layer.feature.properties.description;
+        // ).addTo(mymap);
+        
+    }
+
+    // function filterMydata (event){
+    //         console.log(event);
+    //          // if (filter === 'all') {
+    //          //           mydata.setFilter(function(f) {
+    //          //               return f.properties['confidence'] != null;
+    //          //           });
+    //          //       }else{
+    //          //           mydata.setFilter(function(f) {
+    //          //               return f.properties["confidence"] === "VeryConfident";
+    //          //           });
+    //          //       }
+    //          //       return false;
+    //     }
+
+         $("#VConfident").click(function () {
+            if ($(this).is(":checked")) {
+
+                mydata.setFilter(function(f) {
+                   return f.opts["confidence"] === "VeryConfident";
+               });
+
+
+               console.log("check");
+            }else{
+
+                mydata.setFilter(function(f) {
+                       return f.opts['confidence'] != null;
+                   });
+
+            }
+           });
+
+         $("#PupsPresent").click(function () {
+            if ($(this).is(":checked")) {
+
+                mydata.setFilter(function(f) {
+                   return f.opts["distinguishpups"] === "yes";
+               });
+
+
+               console.log("checkpups");
+            }else{
+
+                mydata.setFilter(function(f) {
+                       return f.opts['distinguishpups'] != null;
+                   });
+
+            }
+           });
+
+         $("#LiveObservation").click(function () {
+            if ($(this).is(":checked")) {
+
+                mydata.setFilter(function(f) {
+                   return f.opts["sightinginputs"] == ("Live Otter(s)");//NEEDS WORK
+               });
+
+
+               console.log("checkpups");
+            }else{
+
+                mydata.setFilter(function(f) {
+                       return f.opts['distinguishpups'] != null;
+                   });
+
+            }
+           });
+
+         $("#NoFilters").click(function () {
+            if ($(this).is(":checked")) {
+                mydata.setFilter(function(f) {
+                       return f.opts['distinguishpups'] != null;
+                   });
+               };
+        });
+
+
+
+</script>
+
+<script>
+    // Initialize collapse button
+    $('.button-collapse').sideNav({
+                menuWidth: 500, // Default is 240
+                edge: 'left', // Choose the horizontal origin
+                closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+                opacity: false
+            }
+    );
+    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+    $('.collapsible').collapsible();
+
+
+        // $("#VConfident").click(function () {
+        //     if ($(this).is(":checked")) {
+        //        console.log("confident" +allData +"check");
+        //        var newdata= Sheetsee.getMatches(allData, "VeryConfident", "confidence");
+        //         console.log(newdata);
+        // var optionsJSON = ["sightingdate","numberotters","comments"];
+        // // an html template for your popup
+        // var template = "<h3><li>Sighting Date:</li> {{sightingdate}}<br><li> Number of Otters:</li> {{numberotters}}<br><li>Comments:</li> {{comments}}</h3>"
+        // var geoJSON = Sheetsee.createGeoJSON(newdata, optionsJSON);
+        // // var map = Sheetsee.loadMap("map");
+        // // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        // // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        // // }).addTo(map);
+
+        // // Try different map tiles? examples.map-20v6611k
+        // // examples.map-y7l23tes
+        // // examples.map-h67hf2ic
+        // // examples.map-i86nkdio
+        // // examples.h186knp8
+        // // Sheetsee.addTileLayer(map, 'jllord.n7aml2bc');
+        // //Sheetsee.addTileLayer(map, 'spatialdev.a71dbae4');
+        // bigMap.markerLayer.clearLayers();
+        // Sheetsee.addMarkerLayer(geoJSON, bigMap, template);
+
+
+        //     }
+        //  else {
+        //         console.log("fail");
+        //     }
+
+        // });
+        
+
+
+</script>
+<script>
+    function openNav() {
+         var width = $(window).width();
+console.log(width);
+    if (width <= 750) { 
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById("map").style.marginLeft = "250px";
+        $('#map').css('width', '100%').css('width', '-=250px');
+
+    } else {
+        document.getElementById("mySidenav").style.width = "500px";
+        document.getElementById("main").style.marginLeft = "500px";
+        document.getElementById("map").style.marginLeft = "500px";
+        $('#map').css('width', '100%').css('width', '-=500px');
+
+
+
+    }
+}
+
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        document.getElementById("map").style.marginLeft= "0";
+        $('#map').css('width', '100%');
+    }
+</script>
+
+</body>
+
 <style>
+
     body {
         font-family: "Lato", sans-serif;
     }
+/*.row.legend {
+    float:right;
+}*/
 
+.leaflet-top.leaflet-left{
+    right: 0;
+}
+
+.leaflet-control-zoom.leaflet-bar.leaflet-control{
+    float: right;
+    right: 20px;
+}
     .sidenav {
         height: 100%;
         width: 0;
         position: fixed;
-        z-index: 1;
+        
         top: 0;
         left: 0;
         background-color: #ffffff;
-        overflow-x: hidden;
+        overflow-x: scroll;
         transition: 0.5s;
         padding-top: 60px;
     }
@@ -60,101 +420,17 @@
 
     }
 
-    @media screen and (max-height: 450px) {
+    @media screen and (max-height: 450px; max-width:450px) {
         .sidenav {padding-top: 15px;}
         .sidenav a {font-size: 18px;}
     }
 
     /* How about a different background color? */
     #map {width: 100%; height: 100%; background-color: #F7CE86; position: fixed}
-    .leaflet-popup-content li {list-style:none;}
+    .leaflet-popup-content li {list-style:none;  font-weight: bold; font-size-adjust: 0.75; color:#8bc34a;} 
     .leaflet-popup-content {width: 102px;}
     .leaflet-popup-content img {width: 100px;}
     a {border: none;}
+
 </style>
-
-<body>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="materialize.min.js"></script>
-
-<div id="mySidenav" class="sidenav">
-    <div class="userView">
-        <div style="text-align: center">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#!user"><img class="square" src="WPZlogo.png" style="width:200px;height:200px;" ></a>
-        </div>
-        <a href="#!name"><span class="white-text name">Otter Spotter</span></a>
-    </div>
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <ul class="collapsible" data-collapsible="accordion">
-        <li>
-            <div class="collapsible-header">Otter Spotter Photos</div>
-            <div class="collapsible-body">This is where photos attached to the submission for can go!<iframe src="https://drive.google.com/embeddedfolderview?id=0B75dNdviw-N-MDFCYnJnY29SUmc#grid"     width="500" height="400" frameborder="0"></iframe>
-            </div>
-        </li>
-        <li>
-            <div class="collapsible-header">Comments and Stories</div>
-            <div class="collapsible-body">This is where comments and stories may go (or in the pop-ups on the map)!<iframe src="https://spreadsheets.google.com/tq?tqx=out:html&tq=select%20B%2C%20Y%20where%20Y%20is%20not%20null&key=1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak&gid=0" width="500" height="400" frameborder="0"></iframe>
-            </div>
-        </li>
-
-    </ul>
-</div>
-
-<div id="main" >
-    <h3 align="center">Otter Spotter Submissions</h3>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
-</div>
-<div id="map" class="content"></div>
-
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var URL = "1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak"
-        Tabletop.init( { key: URL, callback: showInfo, simpleSheet: true } )
-    })
-    function showInfo(data) {
-        console.log(data);
-        // the column headers of the info you want in your popup
-        var optionsJSON = ["sightingdate","numberotters","comments"];
-        // an html template for your popup
-        var template = "<h5>Sighting Date: {{sightingdate}} <br> Number of Otters: {{numberotters}} <br> Comments: {{comments}}</h5>"
-        var geoJSON = Sheetsee.createGeoJSON(data, optionsJSON)
-        var map = Sheetsee.loadMap("map")
-        // Try different map tiles? examples.map-20v6611k
-        // examples.map-y7l23tes
-        // examples.map-h67hf2ic
-        // examples.map-i86nkdio
-        // examples.h186knp8
-        Sheetsee.addTileLayer(map, 'jllord.n7aml2bc')
-        Sheetsee.addMarkerLayer(geoJSON, map, template)
-    }
-
-</script>
-<script>
-    // Initialize collapse button
-    $('.button-collapse').sideNav({
-                menuWidth: 500, // Default is 240
-                edge: 'left', // Choose the horizontal origin
-                closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-                opacity: false
-            }
-    );
-    // Initialize collapsible (uncomment the line below if you use the dropdown variation)
-    $('.collapsible').collapsible();
-</script>
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "500px";
-        document.getElementById("main").style.marginLeft = "500px";
-        document.getElementById("map").style.marginLeft = "500px";
-    }
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft= "0";
-        document.getElementById("map").style.marginLeft= "0";
-    }
-</script>
-
-
-</body>
 </html>
