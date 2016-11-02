@@ -5,13 +5,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="tabletop1.3.4.js"></script>
     <script type="text/javascript" src="sheetsee.js"></script>
-        <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script> -->
-
-    <!-- <link rel="stylesheet" href="Leaflet.markercluster-1.0.0/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="Leaflet.markercluster-1.0.0/dist/MarkerCluster.Default.css" />
-    <script src="Leaflet.markercluster-1.0.0/dist/leaflet.markercluster-src.js"></script> -->
-
+   
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!--Import materialize.css-->
@@ -21,15 +15,17 @@
 
     <script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 
-
-    <title>Map</title>
+    <title>Otter Spotter Map</title>
 </head>
 
 <body>
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+<!-- <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' /> -->
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="materialize.min.js"></script>
@@ -46,30 +42,32 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <ul class="collapsible" data-collapsible="accordion">
         <li>
-            <div class="collapsible-header">Otter Spotter Photos</div>
-            <div class="collapsible-body"><iframe src="https://drive.google.com/embeddedfolderview?id=0B75dNdviw-N-MDFCYnJnY29SUmc#grid"     width="500" height="400" frameborder="0"></iframe>
-            </div>
-        </li>
-        <li>
-            <div class="collapsible-header">Filters
+            <div class="collapsible-header"><i class="material-icons">list</i>Filters
             </div>
 
             <div class="collapsible-body">
                 <label for="Filters" >Click on a button to filter the sightings</label><br>
-                        <input name="Filters" type="radio" id="VConfident" value="VeryConfident" />
+                        <input name="Filters" class="with-gap" type="radio" id="VConfident" value="VeryConfident" />
                          <label for="VConfident">Highly confident otter sightings</label>
                          <br>
-                        <input name="Filters" type="radio" id="PupsPresent" value="PupsPresent" />
+                        <input name="Filters" class="with-gap" type="radio" id="PupsPresent" value="PupsPresent" />
                          <label for="PupsPresent">Otter sightings with pups present</label>
                           <br>
-                        <input name="Filters" type="radio" id="LiveObservation" value="None" />
-                        <label for="LiveObservation">Observations of live otters (NEEDS WORK)</label>
+                        <input name="Filters" class="with-gap" type="radio" id="LiveObservation" value="None" />
+                        <label for="LiveObservation">Observations of live otters</label>
                          <br>
-                        <input name="Filters" type="radio" id="NoFilters" value="None" checked="checked"/>
+                        <input name="Filters" class="with-gap" type="radio" id="NoFilters" value="None" checked="checked"/>
                         <label for="NoFilters">No Filter</label>
-                       
-
-
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header"><i class="material-icons">assessment</i>Summary</div>
+            <div class="collapsible-body"><iframe src="https://spreadsheets.google.com/tq?tqx=out:html&tq=Select%20Count(A)%2C%20Sum(M)%2C%20Sum(R)%0ALabel%20Count(A)%20'Number%20of%20Sightings'%2C%20Sum(M)%20'Total%20Number%20of%20Otters%20Spotted'%2C%20Sum(R)%20'Total%20Time%20of%20Observation%20(min)'&key=1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak&gid=0" width="500" frameborder="0"></iframe>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header"><i class="material-icons">video_library</i>Otter Spotter Photos</div>
+            <div class="collapsible-body"><iframe src="https://drive.google.com/embeddedfolderview?id=0B75dNdviw-N-MDFCYnJnY29SUmc#grid"     width="500" height="400" frameborder="0"></iframe>
             </div>
         </li>
     </ul>
@@ -84,7 +82,7 @@
     <span class="orange-text" style="font-size:25px; cursor:pointer" onclick="openNav()">&#9776; Menu</span>
 </div>
 
-<div id="map" class="content"></div>
+<div id="map"></div>
 
 
 <script type="text/javascript">
@@ -98,139 +96,100 @@
     var allData= [];
     var bigMap= null;
     var mydata= null;
+    var globalGeoJSON= null;
+//load mapbox map
+     L.mapbox.accessToken = "pk.eyJ1Ijoib3R0ZXJzcG90dGVyIiwiYSI6ImNpdXVhMDlqZjAzMjIydXBzbW5rYjVkbjMifQ.OmeqDy-3EUj-A_b81e-fGA";
+        bigMap= mymap;
+        var mymap= L.mapbox.map('map', "mapbox.streets", { zoomControl: true });
+        var overlays = L.layerGroup().addTo(mymap);
+
     function showInfo(data) {
         allData= data;
         console.log(allData);
         // the column headers of the info you want in your popup
         var optionsJSON = ["sightingdate","numberotters","comments", "confidence", "distinguishpups", "sightinginputs"];
-        // an html template for your popup
-        
+    
+        //set geoJSON
         var geoJSON = Sheetsee.createGeoJSON(allData, optionsJSON);
+
+        globalGeoJSON= geoJSON;
 
         console.log("meydata", geoJSON);
 
-        // var mymap = L.map('map').setView([46.6, -120.6], 6);
+        showMarkers(geoJSON);
+  };
 
-        L.mapbox.accessToken = "pk.eyJ1Ijoib3R0ZXJzcG90dGVyIiwiYSI6ImNpdXVhMDlqZjAzMjIydXBzbW5rYjVkbjMifQ.OmeqDy-3EUj-A_b81e-fGA";
-        var mymap= L.mapbox.map('map', "mapbox.streets", { zoomControl: true });
-        mydata = L.mapbox.featureLayer().addTo(mymap);
+  function showMarkers(geoJSON){
+    //clears markers on map
+      overlays.clearLayers();
 
-//         L.mapbox.featureLayer().on('ready', function(e) {
-//     // The clusterGroup gets each marker in the group added to it
-//     // once loaded, and then is added to the map
-//     var clusterGroup = new L.MarkerClusterGroup({
-//       // The iconCreateFunction takes the cluster as an argument and returns
-//       // an icon that represents it. We use L.mapbox.marker.icon in this
-//       // example, but you could also use L.icon or L.divIcon.
-//       iconCreateFunction: function(cluster) {
-//         return L.mapbox.marker.icon({
-//           // show the number of markers in the cluster on the icon.
-//           'marker-symbol': cluster.getChildCount(),
-//           'marker-color': '#422'
-//         });
-//       }
-//     });
-//     e.target.eachLayer(function(layer) {
-//         clusterGroup.addLayer(layer);
-//     });
-//     mymap.addLayer(clusterGroup);
-// });
+    // var ratIcon = L.icon({
+    // iconUrl: 'http://www.clipartqueen.com/image-files/paw-prints-clipart-otter.png',
+    // iconSize: [24,32.25] });
 
-        mydata.setGeoJSON(geoJSON);
+      //creates clusters of markers
+ var markers = new L.MarkerClusterGroup().addTo(overlays);
 
-       
-        mymap.fitBounds(mydata);
-
-
-        mydata.on('click', function(e) {  
-
-        costumeMarkerPopUp( e, e.latlng);
-
-        });
-        function costumeMarkerPopUp(item, position){
-           //offset values
-           var options = {
-               offset:  new L.Point(1, -10),
+    for (var i = 0; i < geoJSON.length; i++) {
+        var a = geoJSON[i];
+        //create template for popups using specified options
+        var options = {
                maxHeight: 200,
                minWidth:200
-
            };
+        var title = L.popup(options)
+            .setContent("<li>Sighting Date:</li>" + a.opts.sightingdate +"<br><li> Number of Otters:</li>" +a.opts.numberotters + "<br><li>Comments:</li>" +a.opts.comments)
+           
 
-           console.log("e", item);
-           // close any map popups
-           //$scope.map.closePopup();
-           //var template = '<md-button class="md-primary" ng-click="showAdvanced()" style="font-size: 12px">View response</md-button>';
-           // var template = '<div><span class="popText" ng-click="showAdvanced()">view</span></div>';
-           var template = "<h3><li>Sighting Date:</li>" + item.layer.feature.opts.sightingdate +"<br><li> Number of Otters:</li>" +item.layer.feature.opts.numberotters + "<br><li>Comments:</li>" +item.layer.feature.opts.comments +"</h3>"
-           // template = template, linkFunction = $compile(angular.element(template)),
-           //     newScope = $scope.$new();
-
-           // define the map popup and put it on the map at the center of the polygon
-           popup = L.popup(options)
-               .setLatLng([position.lat, position.lng])
-               .setContent(template)
-               .openOn(mymap)
-       }
-
-
-    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-    //     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-    //     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-    //     'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    //     id: 'mapbox.streets'
-    // }).addTo(mymap);
-    
-        //bigMap = Sheetsee.loadMap("map");
-        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-
-        // Try different map tiles? examples.map-20v6611k
-        // examples.map-y7l23tes
-        // examples.map-h67hf2ic
-        // examples.map-i86nkdio
-        // examples.h186knp8
-        //Sheetsee.addTileLayer(bigMap, 'jllord.n7aml2bc');
-        //Sheetsee.addTileLayer(map, 'spatialdev.a71dbae4');
-        //Sheetsee.addMarkerLayer(geoJSON, bigMap, template);
-        // L.geoJSON(geoJSON, {
-        //     style: function (feature) {
-        //         //return {color: feature.properties.color};
-        //      }
-        //      }).bindPopup( template,
-        //     //return layer.feature.properties.description;
-        // ).addTo(mymap);
-        
+        var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]), {
+            icon: L.mapbox.marker.icon({'marker-size':'small', 'marker-color': '8bc34a'})
+           // title: title
+        });
+        marker.bindPopup(title);
+        markers.addLayer(marker);
     }
 
-    // function filterMydata (event){
-    //         console.log(event);
-    //          // if (filter === 'all') {
-    //          //           mydata.setFilter(function(f) {
-    //          //               return f.properties['confidence'] != null;
-    //          //           });
-    //          //       }else{
-    //          //           mydata.setFilter(function(f) {
-    //          //               return f.properties["confidence"] === "VeryConfident";
-    //          //           });
-    //          //       }
-    //          //       return false;
-    //     }
+    mymap.addLayer(markers);
+    mymap.fitBounds(markers);
+
+    //     mydata.setGeoJSON(geoJSON);
+
+    //     mymap.fitBounds(mydata);
+
+    //     mydata.on('click', function(e) {  
+
+    //     costumeMarkerPopUp( e, e.latlng);
+
+    //     });
+    //     function costumeMarkerPopUp(item, position){
+    //        //offset values
+    //        var options = {
+    //            offset:  new L.Point(1, -10),
+    //            maxHeight: 200,
+    //            minWidth:200
+
+    //        };
+
+    //        console.log("e", item);
+    //        // close any map popups
+    //        //$scope.map.closePopup();
+    //        var template = "<li>Sighting Date:</li>" + item.layer.feature.opts.sightingdate +"<br><li> Number of Otters:</li>" +item.layer.feature.opts.numberotters + "<br><li>Comments:</li>" +item.layer.feature.opts.comments
+    
+    //        popup = L.popup(options)
+    //            .setLatLng([position.lat, position.lng])
+    //            .setContent(template)
+    //            .openOn(mymap)
+    //    }
+        };
+  
 
          $("#VConfident").click(function () {
             if ($(this).is(":checked")) {
-
-                mydata.setFilter(function(f) {
+            
+                var arr= globalGeoJSON.filter(function(f) {
                    return f.opts["confidence"] === "VeryConfident";
                });
-
-
-               console.log("check");
-            }else{
-
-                mydata.setFilter(function(f) {
-                       return f.opts['confidence'] != null;
-                   });
+                 showMarkers(arr);
 
             }
            });
@@ -238,44 +197,30 @@
          $("#PupsPresent").click(function () {
             if ($(this).is(":checked")) {
 
-                mydata.setFilter(function(f) {
-                   return f.opts["distinguishpups"] === "yes";
+              var arr= globalGeoJSON.filter(function(f) {
+                   return f.opts["distinguishpups"] === "Yes";
                });
-
-
-               console.log("checkpups");
-            }else{
-
-                mydata.setFilter(function(f) {
-                       return f.opts['distinguishpups'] != null;
-                   });
-
-            }
+                 showMarkers(arr);
+            };
            });
 
-         $("#LiveObservation").click(function () {
+          $("#LiveObservation").click(function () {
             if ($(this).is(":checked")) {
 
-                mydata.setFilter(function(f) {
-                   return f.opts["sightinginputs"] == ("Live Otter(s)");//NEEDS WORK
+                var arr= globalGeoJSON.filter(function(f) {
+                   return f.opts["sightinginputs"].includes('Live Otter(s)');
                });
-
-
-               console.log("checkpups");
-            }else{
-
-                mydata.setFilter(function(f) {
-                       return f.opts['distinguishpups'] != null;
-                   });
+                showMarkers(arr);
 
             }
            });
 
          $("#NoFilters").click(function () {
             if ($(this).is(":checked")) {
-                mydata.setFilter(function(f) {
-                       return f.opts['distinguishpups'] != null;
+                var arr= globalGeoJSON.filter(function(f) {
+                       return f.opts['sightingdate'] != null;
                    });
+                showMarkers(arr);
                };
         });
 
@@ -347,8 +292,6 @@ console.log(width);
         document.getElementById("map").style.marginLeft = "500px";
         $('#map').css('width', '100%').css('width', '-=500px');
 
-
-
     }
 }
 
@@ -365,12 +308,9 @@ console.log(width);
 
 <style>
 
-    body {
-        font-family: "Lato", sans-serif;
+body {
+        font-family: "Lato", sans-serif; margin: 0; padding:0;
     }
-/*.row.legend {
-    float:right;
-}*/
 
 .leaflet-top.leaflet-left{
     right: 0;
@@ -416,21 +356,43 @@ console.log(width);
 
     #main {
         transition: margin-left .5s;
-
-
     }
 
-    @media screen and (max-height: 450px; max-width:450px) {
-        .sidenav {padding-top: 15px;}
-        .sidenav a {font-size: 18px;}
+    [type="radio"].with-gap:checked + label:before {
+    border-radius: 50%;
+    border: 2px solid #ff9800;
     }
+
+    [type="radio"].with-gap:checked + label:after {
+        border-radius: 50%;
+        border: 2px solid #ff9800;
+        background-color: #ff9800;
+        z-index: 0;
+        -webkit-transform: scale(.5);
+        -moz-transform: scale(.5);
+        -ms-transform: scale(.5);
+        -o-transform: scale(.5);
+        transform: scale(.5); }
+
+
+    
 
     /* How about a different background color? */
-    #map {width: 100%; height: 100%; background-color: #F7CE86; position: fixed}
+    #map {top:190px; bottom:0; width: 100%; background-color: #F7CE86; position: fixed !important;}
     .leaflet-popup-content li {list-style:none;  font-weight: bold; font-size-adjust: 0.75; color:#8bc34a;} 
     .leaflet-popup-content {width: 102px;}
     .leaflet-popup-content img {width: 100px;}
     a {border: none;}
 
+@media all and (max-width:450px) {
+        .sidenav {padding-top: 15px;
+            font-size: 24px ;}
+        .leaflet-popup-content li {
+            color:purple;
+
+
+        }
+        #map {top:200px;}
+    }
 </style>
 </html>
