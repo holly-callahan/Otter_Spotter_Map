@@ -2,18 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+  <!--   Import ajax, tabletop and sheetsee -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="tabletop1.3.4.js"></script>
     <script type="text/javascript" src="sheetsee.js"></script>
-   
     
+    <!-- Import Material Icons -->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
 
    
-
+<!--     Import Mapbox and Leaflet marker clustering -->
     <script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
@@ -24,13 +25,12 @@
 </head>
 
 <body>
-<!-- <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' /> -->
 
+<!-- Import JQuery and Materialize JavaScript -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="materialize.min.js"></script>
 
+<!-- Side Navigation Panel and dropdowns -->
 <div id="mySidenav" class="sidenav">
     <div class="userView">
         <div style="text-align: center">
@@ -56,18 +56,23 @@
                           <br>
                         <input name="Filters" class="with-gap" type="radio" id="LiveObservation" value="None" />
                         <label for="LiveObservation">Observations of live otters</label>
+                        <br>
+                        <input name="Filters" class="with-gap" type="radio" id="SignObservation" value="None" />
+                        <label for="SignObservation">Observations of otter signs (tracks, slides, etc.)</label>
                          <br>
                         <input name="Filters" class="with-gap" type="radio" id="NoFilters" value="None" checked="checked"/>
                         <label for="NoFilters">No Filter</label>
             </div>
         </li>
         <li>
-            <div class="collapsible-header">Summary</div>
+        <!-- Add Google Sheet Summary using encoded Google Query language found at https://developers.google.com/chart/interactive/docs/querylanguage -->
+            <div class="collapsible-header"><i class="material-icons">assessment</i>Summary</div>
             <div class="collapsible-body"><iframe src="https://spreadsheets.google.com/tq?tqx=out:html&tq=Select%20Count(A)%2C%20Sum(M)%2C%20Sum(R)%0ALabel%20Count(A)%20'Number%20of%20Sightings'%2C%20Sum(M)%20'Total%20Number%20of%20Otters%20Spotted'%2C%20Sum(R)%20'Total%20Time%20of%20Observation%20(min)'&key=1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak&gid=0" width="500" frameborder="0"></iframe>
             </div>
         </li>
         <li>
-            <div class="collapsible-header">Otter Spotter Photos</div>
+    <!--     Add link to folder in Drive that has photos -->
+            <div class="collapsible-header"><i class="material-icons">video_library</i>Otter Spotter Photos</div>
             <div class="collapsible-body"><iframe src="https://drive.google.com/embeddedfolderview?id=0B75dNdviw-N-MDFCYnJnY29SUmc#grid"     width="500" height="400" frameborder="0"></iframe>
             </div>
         </li>
@@ -76,19 +81,20 @@
  
 </div>
 
-
+<!-- Title and menu button -->
 <div id="main" >
     <h3 class="light-green-text" align="center">Woodland Park Zoo's Otter Spotter Citizen Science Initative</h3>
     <h5 class="orange-text" align="center">Otter Sightings Map</h5>
     <span class="orange-text" style="font-size:25px; cursor:pointer" onclick="openNav()">&#9776; Menu</span>
 </div>
 
+<!-- Map -->
 <div id="map"></div>
 
 
 <script type="text/javascript">
 
-
+//iniatiate webpage, take google sheet data and make it into a geoJSON
     document.addEventListener('DOMContentLoaded', function() {
         var URL = "1BssuVVWZjeVpqudW-lcmM1lhi9LnrlO8RvkkC_Fcuak"
         Tabletop.init( { key: URL, callback: showInfo, simpleSheet: true } );
@@ -153,37 +159,9 @@
     mymap.addLayer(markers);
     mymap.fitBounds(markers);
 
-    //     mydata.setGeoJSON(geoJSON);
-
-    //     mymap.fitBounds(mydata);
-
-    //     mydata.on('click', function(e) {  
-
-    //     costumeMarkerPopUp( e, e.latlng);
-
-    //     });
-    //     function costumeMarkerPopUp(item, position){
-    //        //offset values
-    //        var options = {
-    //            offset:  new L.Point(1, -10),
-    //            maxHeight: 200,
-    //            minWidth:200
-
-    //        };
-
-    //        console.log("e", item);
-    //        // close any map popups
-    //        //$scope.map.closePopup();
-    //        var template = "<li>Sighting Date:</li>" + item.layer.feature.opts.sightingdate +"<br><li> Number of Otters:</li>" +item.layer.feature.opts.numberotters + "<br><li>Comments:</li>" +item.layer.feature.opts.comments
-    
-    //        popup = L.popup(options)
-    //            .setLatLng([position.lat, position.lng])
-    //            .setContent(template)
-    //            .openOn(mymap)
-    //    }
         };
   
-
+            //Filter sighting points by those marked Very Confident and add them to the map.
          $("#VConfident").click(function () {
             if ($(this).is(":checked")) {
             
@@ -195,6 +173,7 @@
             }
            });
 
+         //Filter sighting points by those with pups present and add them to the map.
          $("#PupsPresent").click(function () {
             if ($(this).is(":checked")) {
 
@@ -205,6 +184,7 @@
             };
            });
 
+         //Filter sighting points by of Live Otters and add them to the map.
           $("#LiveObservation").click(function () {
             if ($(this).is(":checked")) {
 
@@ -216,6 +196,19 @@
             }
            });
 
+          //Filter sighting points by those with Otter tracks and add them to the map.
+          $("#SignObservation").click(function () {
+            if ($(this).is(":checked")) {
+
+                var arr= globalGeoJSON.filter(function(f) {
+                   return f.opts["sightinginputs"].includes('River Otter Signs');
+               });
+                showMarkers(arr);
+
+            }
+           });
+
+          //Do not filter sighting points
          $("#NoFilters").click(function () {
             if ($(this).is(":checked")) {
                 var arr= globalGeoJSON.filter(function(f) {
@@ -224,8 +217,6 @@
                 showMarkers(arr);
                };
         });
-
-
 
 </script>
 
@@ -240,44 +231,11 @@
     );
     // Initialize collapsible (uncomment the line below if you use the dropdown variation)
     $('.collapsible').collapsible();
-
-
-        // $("#VConfident").click(function () {
-        //     if ($(this).is(":checked")) {
-        //        console.log("confident" +allData +"check");
-        //        var newdata= Sheetsee.getMatches(allData, "VeryConfident", "confidence");
-        //         console.log(newdata);
-        // var optionsJSON = ["sightingdate","numberotters","comments"];
-        // // an html template for your popup
-        // var template = "<h3><li>Sighting Date:</li> {{sightingdate}}<br><li> Number of Otters:</li> {{numberotters}}<br><li>Comments:</li> {{comments}}</h3>"
-        // var geoJSON = Sheetsee.createGeoJSON(newdata, optionsJSON);
-        // // var map = Sheetsee.loadMap("map");
-        // // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        // // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        // // }).addTo(map);
-
-        // // Try different map tiles? examples.map-20v6611k
-        // // examples.map-y7l23tes
-        // // examples.map-h67hf2ic
-        // // examples.map-i86nkdio
-        // // examples.h186knp8
-        // // Sheetsee.addTileLayer(map, 'jllord.n7aml2bc');
-        // //Sheetsee.addTileLayer(map, 'spatialdev.a71dbae4');
-        // bigMap.markerLayer.clearLayers();
-        // Sheetsee.addMarkerLayer(geoJSON, bigMap, template);
-
-
-        //     }
-        //  else {
-        //         console.log("fail");
-        //     }
-
-        // });
         
-
 
 </script>
 <script>
+//Open navigation bar and make is slightly smaller on smaller screens
     function openNav() {
          var width = $(window).width();
 console.log(width);
@@ -296,7 +254,7 @@ console.log(width);
     }
 }
 
-
+//close navigation bar
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft= "0";
@@ -393,7 +351,6 @@ body {
 
 
         }
-        #map {top:200px;}
     }
 </style>
 </html>
